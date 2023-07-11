@@ -187,7 +187,8 @@
       redirect: "follow",
       success: function (response) {
         // Process and render testimonials
-        renderTestimonials(response);
+        // renderTestimonials(response);
+        rendertestimonials2(response)
       },
       error: function (error) {
         console.error(error);
@@ -228,6 +229,35 @@
         // Append testimonial item to carousel inner
         carouselInner.append(testimonialItem);
       });
+    }
+    function rendertestimonials2(jsonDataArray){
+      const cardRow = document.getElementById('cardRow');
+  
+      // Loop through the JSON data array
+      for (let i = 0; i < jsonDataArray.length; i++) {
+        const jsonData = jsonDataArray[i];
+  
+        // Create card elements
+        const colDiv = document.createElement('div');
+        colDiv.classList.add('col-md-4', 'mb-4', 'mb-md-0');
+        const cardDiv = document.createElement('div');
+        cardDiv.classList.add('card', 'shadow-lg', 'p-2', 'bg-body');
+        const cardBodyDiv = document.createElement('div');
+        cardBodyDiv.classList.add('card-body', 'pb-4');
+        const nameHeading = document.createElement('h4');
+        nameHeading.classList.add('font-weight-bold');
+        nameHeading.textContent = jsonData.name;
+        const reviewParagraph = document.createElement('p');
+        reviewParagraph.classList.add('mb-2');
+        reviewParagraph.textContent = jsonData.review;
+  
+        // Append card elements to the card row
+        cardBodyDiv.appendChild(nameHeading);
+        cardBodyDiv.appendChild(reviewParagraph);
+        cardDiv.appendChild(cardBodyDiv);
+        colDiv.appendChild(cardDiv);
+        cardRow.appendChild(colDiv);
+      }
     }
   });
 })(jQuery);
