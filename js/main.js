@@ -203,7 +203,14 @@ function renderUserReviews(reviews) {
 
   const reviewsContainer = document.getElementById('reviews-container');
 
+  let count = 0
   for (const key in reviews) {
+
+    count += 1
+    if (count > 3){
+      break
+    }
+
     const review = reviews[key];
 
     const container = document.createElement('div');
