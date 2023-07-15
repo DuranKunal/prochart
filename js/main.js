@@ -186,78 +186,79 @@
       type: "GET",
       redirect: "follow",
       success: function (response) {
-        // Process and render testimonials
-        // renderTestimonials(response);
-        rendertestimonials2(response)
+        console.log(response)
+        // rendertestimonials2(response)
+        renderUserReviews(response)
       },
       error: function (error) {
         console.error(error);
       },
     });
-
-    // Function to render testimonials
-    function renderTestimonials(testimonials) {
-      var carouselInner = $("#user-testimonials");
-
-      const reviews = [];
-      for (const key in testimonials) {
-        reviews.push({
-          id: key,
-          ...testimonials[key],
-        });
-      }
-
-      // Iterate through testimonials
-      $.each(reviews, function (index, testimonial) {
-        var isActive = index === 0 ? "active" : "";
-        // Create testimonial item
-        var testimonialItem = $("<div></div>").addClass(
-          "testimonial-item text-center carousel-item " + isActive
-        );
-
-        // Create testimonial name
-        var name = $("<h5></h5>").addClass("mb-0").text(testimonial["name"]);
-
-        // Create testimonial text
-        var testimonialText = $("<div></div>")
-          .addClass("testimonial-text bg-light text-center p-2")
-          .append($("<p></p>").addClass("mb-0").text(testimonial["review"]));
-
-        // Append name and testimonial text to testimonial item
-        testimonialItem.append(name, testimonialText);
-
-        // Append testimonial item to carousel inner
-        carouselInner.append(testimonialItem);
-      });
-    }
-    function rendertestimonials2(jsonDataArray){
-      const cardRow = document.getElementById('cardRow');
-  
-      // Loop through the JSON data array
-      for (let i = 0; i < jsonDataArray.length; i++) {
-        const jsonData = jsonDataArray[i];
-  
-        // Create card elements
-        const colDiv = document.createElement('div');
-        colDiv.classList.add('col-md-4', 'mb-4', 'mb-md-0');
-        const cardDiv = document.createElement('div');
-        cardDiv.classList.add('card', 'shadow-lg', 'p-2', 'bg-body');
-        const cardBodyDiv = document.createElement('div');
-        cardBodyDiv.classList.add('card-body', 'pb-4');
-        const nameHeading = document.createElement('h4');
-        nameHeading.classList.add('font-weight-bold');
-        nameHeading.textContent = jsonData.name;
-        const reviewParagraph = document.createElement('p');
-        reviewParagraph.classList.add('mb-2');
-        reviewParagraph.textContent = jsonData.review;
-  
-        // Append card elements to the card row
-        cardBodyDiv.appendChild(nameHeading);
-        cardBodyDiv.appendChild(reviewParagraph);
-        cardDiv.appendChild(cardBodyDiv);
-        colDiv.appendChild(cardDiv);
-        cardRow.appendChild(colDiv);
-      }
-    }
   });
 })(jQuery);
+
+
+
+function renderUserReviews(reviews) {
+
+  const reviewsContainer = document.getElementById('reviews-container');
+
+  for (const key in reviews) {
+    const review = reviews[key];
+
+    const container = document.createElement('div');
+    container.className = 'col-md-4 mb-4 mb-md-0';
+
+    const card = document.createElement('div');
+    card.className = 'card shadow-lg p-2 bg-body';
+
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body pb-4';
+
+    const nameHeader = document.createElement('h4');
+    nameHeader.className = 'font-weight-bold';
+    nameHeader.textContent = review.name;
+
+    const reviewContent = document.createElement('p');
+    reviewContent.className = 'mb-2';
+    reviewContent.innerHTML = `<i class="fas fa-quote-left pe-2"></i>${review.review}`;
+
+    cardBody.appendChild(nameHeader);
+    cardBody.appendChild(reviewContent);
+    card.appendChild(cardBody);
+    container.appendChild(card);
+    reviewsContainer.appendChild(container);
+
+  }
+
+}
+
+function rendertestimonials2(jsonDataArray) {
+  const cardRow = document.getElementById('cardRow');
+
+  // Loop through the JSON data array
+  for (let i = 0; i < jsonDataArray.length; i++) {
+    const jsonData = jsonDataArray[i];
+
+    // Create card elements
+    const colDiv = document.createElement('div');
+    colDiv.classList.add('col-md-4', 'mb-4', 'mb-md-0');
+    const cardDiv = document.createElement('div');
+    cardDiv.classList.add('card', 'shadow-lg', 'p-2', 'bg-body');
+    const cardBodyDiv = document.createElement('div');
+    cardBodyDiv.classList.add('card-body', 'pb-4');
+    const nameHeading = document.createElement('h4');
+    nameHeading.classList.add('font-weight-bold');
+    nameHeading.textContent = jsonData.name;
+    const reviewParagraph = document.createElement('p');
+    reviewParagraph.classList.add('mb-2');
+    reviewParagraph.textContent = jsonData.review;
+
+    // Append card elements to the card row
+    cardBodyDiv.appendChild(nameHeading);
+    cardBodyDiv.appendChild(reviewParagraph);
+    cardDiv.appendChild(cardBodyDiv);
+    colDiv.appendChild(cardDiv);
+    cardRow.appendChild(colDiv);
+  }
+}
