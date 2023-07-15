@@ -210,7 +210,7 @@ function renderUserReviews(reviews) {
     container.className = 'col-md-4 mb-4 mb-md-0';
 
     const card = document.createElement('div');
-    card.className = 'card shadow-lg p-2 bg-body';
+    card.className = 'card shadow-lg p-2 bg-body h-100';
 
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body pb-4';
