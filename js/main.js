@@ -204,7 +204,15 @@ function renderUserReviews(reviews) {
   const reviewsContainer = document.getElementById('reviews-container');
 
   let count = 0
+  let allReviews = {}
   for (const key in reviews) {
+    const review = reviews[key];
+    if (review.order) {
+      console.log(review)
+      allReviews[key] = review
+    }
+  }
+  for (const key in allReviews) {
 
     count += 1
     if (count > 3){
