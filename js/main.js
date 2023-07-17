@@ -73,89 +73,110 @@
   });
 
   // Admin Testimonials
-
-  // reviews data
   const reviews = [];
-
-  $(document).ready(function () {
-    // Range Slider
-    var slider = $("#range-slider").slider({
-      min: 0,
-      max: 1000,
-      step: 5,
-      value: [0, 1000],
-    });
-
-    var sliderLowerValue = $("#range-indicator-left");
-    var sliderUpperValue = $("#range-indicator-right");
-
-    // Function to prepare review data
-    function prepareReviewData(reviewers) {
-      for (const key in reviewers) {
-        reviews.push({
-          id: key,
-          ...reviewers[key],
-        });
-      }
+  function prepareReviewData(reviewers) {
+    for (const key in reviewers) {
+      reviews.push({
+        id: key,
+        ...reviewers[key],
+      });
     }
+  }
 
-    // Fetch reviewer data
-    $.ajax({
-      url: "https://prochart-backend-default-rtdb.asia-southeast1.firebasedatabase.app/admin-review.json",
-      type: "GET",
-      redirect: "follow",
-      success: function (response) {
-        // Process and render review boxes
-        prepareReviewData(response);
-        renderReviews(reviews);
-      },
-      error: function (error) {
-        console.error(error);
-      },
-    });
-
-    slider.on("slideStop", function (slideEvt) {
-      // Get the selected range values
-      var lowerLimit = slideEvt.value[0];
-      var upperLimit = slideEvt.value[1];
-
-      // Update the range values
-      sliderLowerValue.empty();
-      sliderUpperValue.empty();
-      sliderLowerValue.append(`${lowerLimit}%`);
-      sliderUpperValue.append(`${upperLimit}%`);
-
-      // Filter the reviews based on the selected range
-      var filteredReviews = reviews.filter(function (review) {
-        var profitPer = review.profitPer;
-        return profitPer >= lowerLimit && profitPer <= upperLimit;
-      });
-
-      // Clear the existing reviews
-      $(".review-boxes").empty();
-
-      // Render the filtered reviews
-      $.each(filteredReviews, function (index, review) {
-        var reviewBox = $("<div>").addClass("review-box");
-        var reviewerName = $("<div>")
-          .addClass("reviewer-name")
-          .text(review.name);
-        var reviewScreenshot = $("<div>").addClass("review-screenshot");
-        var screenshotImg = $("<img>")
-          .attr("src", review.screenshot)
-          .attr("alt", "screenshot");
-        var profitPer = $("<div>")
-          .addClass("profitPer")
-          .html("Profit gained: <b>" + review.profitPer + "%</b>");
-
-        reviewScreenshot.append(screenshotImg);
-        reviewBox.append(reviewerName, reviewScreenshot, profitPer);
-        $(".review-boxes").append(reviewBox);
-      });
-    });
-
-    // Initial rendering of reviews
+  $.ajax({
+    url: "https://prochart-backend-default-rtdb.asia-southeast1.firebasedatabase.app/admin-review.json",
+    type: "GET",
+    redirect: "follow",
+    success: function (response) {
+      prepareReviewData(response);
+      renderScreenshots(reviews);
+    },
+    error: function (error) {
+      console.error(error);
+    },
   });
+  // reviews data
+  // const reviews = [];
+
+  // $(document).ready(function () {
+  //   // Range Slider
+  //   var slider = $("#range-slider").slider({
+  //     min: 0,
+  //     max: 1000,
+  //     step: 5,
+  //     value: [0, 1000],
+  //   });
+
+  //   var sliderLowerValue = $("#range-indicator-left");
+  //   var sliderUpperValue = $("#range-indicator-right");
+
+  //   // Function to prepare review data
+  //   function prepareReviewData(reviewers) {
+  //     for (const key in reviewers) {
+  //       reviews.push({
+  //         id: key,
+  //         ...reviewers[key],
+  //       });
+  //     }
+  //   }
+
+  //   // Fetch reviewer data
+  //   $.ajax({
+  //     url: "https://prochart-backend-default-rtdb.asia-southeast1.firebasedatabase.app/admin-review.json",
+  //     type: "GET",
+  //     redirect: "follow",
+  //     success: function (response) {
+  //       // Process and render review boxes
+  //       prepareReviewData(response);
+  //       renderReviews(reviews);
+  //     },
+  //     error: function (error) {
+  //       console.error(error);
+  //     },
+  //   });
+
+  //   slider.on("slideStop", function (slideEvt) {
+  //     // Get the selected range values
+  //     var lowerLimit = slideEvt.value[0];
+  //     var upperLimit = slideEvt.value[1];
+
+  //     // Update the range values
+  //     sliderLowerValue.empty();
+  //     sliderUpperValue.empty();
+  //     sliderLowerValue.append(`${lowerLimit}%`);
+  //     sliderUpperValue.append(`${upperLimit}%`);
+
+  //     // Filter the reviews based on the selected range
+  //     var filteredReviews = reviews.filter(function (review) {
+  //       var profitPer = review.profitPer;
+  //       return profitPer >= lowerLimit && profitPer <= upperLimit;
+  //     });
+
+  //     // Clear the existing reviews
+  //     $(".review-boxes").empty();
+
+  //     // Render the filtered reviews
+  //     $.each(filteredReviews, function (index, review) {
+  //       var reviewBox = $("<div>").addClass("review-box");
+  //       var reviewerName = $("<div>")
+  //         .addClass("reviewer-name")
+  //         .text(review.name);
+  //       var reviewScreenshot = $("<div>").addClass("review-screenshot");
+  //       var screenshotImg = $("<img>")
+  //         .attr("src", review.screenshot)
+  //         .attr("alt", "screenshot");
+  //       var profitPer = $("<div>")
+  //         .addClass("profitPer")
+  //         .html("Profit gained: <b>" + review.profitPer + "%</b>");
+
+  //       reviewScreenshot.append(screenshotImg);
+  //       reviewBox.append(reviewerName, reviewScreenshot, profitPer);
+  //       $(".review-boxes").append(reviewBox);
+  //     });
+  //   });
+
+  //   // Initial rendering of reviews
+  // });
 
   // Function to render reviews
   function renderReviews(reviews) {
@@ -198,7 +219,35 @@
 })(jQuery);
 
 
+function renderScreenshots(jsonData) {
+  let html = `
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+`;
 
+  for (const key in jsonData) {
+    if (jsonData.hasOwnProperty(key)) {
+      const item = jsonData[key];
+      html += `
+    <div class="col">
+      <div class="card h-100 shadow-lg px-3 pt-3"
+        style="border: none; border-radius: 1vw; background: #FAF9F6;">
+        <img src="${item.screenshot}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <p class="card-text">Returns: ${item.profitPer} %</p>
+        </div>
+      </div>
+    </div>
+  `;
+    }
+  }
+
+  html += `
+  </div>
+`;
+
+  let ssContainer = document.getElementById("screenshot-container");
+  ssContainer.innerHTML = html;
+}
 function renderUserReviews(reviews) {
 
   const reviewsContainer = document.getElementById('reviews-container');
